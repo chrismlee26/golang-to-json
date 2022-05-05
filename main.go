@@ -62,29 +62,38 @@ func main() {
 	res2B, _ := json.Marshal(res2D)
 	fmt.Println(string(res2B))
 
-	// JSON package decode custom data types
+	// decode generic json data into Go values
 	byt := []byte(`{"num":6.13,"strs":["a","b"]}`)
 
+	// create variable for decoded json data
+	// map[string]interface{} holds map of string to arbitrary data types
 	var dat map[string]interface{}
 
+	// decode function with error checking
 	if err := json.Unmarshal(byt, &dat); err != nil {
 		panic(err)
 	}
 	fmt.Println(dat)
 
+	// convert values in decoded map to appropriate type
+	// convert value in num to float64 type
 	num := dat["num"].(float64)
 	fmt.Println(num)
 
+	// accessing nested data requires a series of conversions
 	strs := dat["strs"].([]interface{})
 	str1 := strs[0].(string)
 	fmt.Println(str1)
 
+	// decode JSON into custom data types.
+	// add additional type-safety to programs to avoid type assertions when accessing decoded data
 	str := `{"page": 1, "fruits": ["pineapple, "cherry"]}`
 	res := response2{}
 	json.Unmarshal([]byte(str), &res)
 	fmt.Println(res)
 	fmt.Println(res.Fruits[0])
 
+	// example: stream JSON encodings directly to os.Writers
 	enc := json.NewEncoder(os.Stdout)
 	d := map[string]int{"pineapple": 5, "cherry": 9}
 	enc.Encode(d)
